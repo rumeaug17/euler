@@ -189,13 +189,150 @@ object EulerPart2:
     (1 to 1000).map(name).sum
   } named "euler17"
 
+  def TriangleSumProblems(input: IndexedSeq[String]): Long =
+    val reverseTriangleArray = input.map(lines => lines.split(' ').map(_.toLong)).reverse
+
+    inline def tour(n: Int)(predLine: IndexedSeq[Long]): IndexedSeq[Long] =
+      val line = reverseTriangleArray(n)
+      for
+        j <- line.indices
+        k = line(j)
+      yield k + Math.max(predLine(j), predLine(j + 1))
+
+    @tailrec
+    def recTour(n: Int)(predLine: IndexedSeq[Long]): IndexedSeq[Long] =
+      if n >= reverseTriangleArray.length then
+        predLine
+      else
+        val next = tour(n)(predLine)
+        recTour(n + 1)(next)
+
+    recTour(1)(reverseTriangleArray(0)).last
+  end TriangleSumProblems
+  val euler18 = Mesure {
+    val input = """|75
+                   |95 64
+                   |17 47 82
+                   |18 35 87 10
+                   |20 04 82 47 65
+                   |19 01 23 75 03 34
+                   |88 02 77 73 07 63 67
+                   |99 65 04 28 06 16 70 92
+                   |41 41 26 56 83 40 80 70 33
+                   |41 48 72 33 47 32 37 16 94 29
+                   |53 71 44 65 25 43 91 52 97 51 14
+                   |70 11 33 28 77 73 17 78 39 68 17 57
+                   |91 71 52 38 17 14 91 43 58 50 27 29 48
+                   |63 66 04 68 89 53 67 30 73 16 69 87 40 31
+                   |04 62 98 27 23 09 70 98 73 93 38 53 60 04 23""".stripMargin.split("\n")
+
+    TriangleSumProblems(input)
+  } named "euler18"
+
+  /**
+   * Problème 19
+   *
+   * Nombre de dimanches entre le 01/01/1901 et le 31/12/2000
+   */
+  val euler19 = Mesure {
+    def mod(x: Long, y: Long): Long =
+      val x1 = x % y
+      if y > 0 && x1 < 0 || y < 0 && x1 > 0 then
+        x1 + y
+      else
+        x1
+
+    def dayOfWeeks(year: Int, month: Int, day: Int): Int =
+      val m1 = mod(month - 3, 4800l)
+      val y = mod(year + m1 / 12, 400)
+      val m = m1 % 12
+      (y + (y / 4) - (y / 100) + ((13 * m + 2) / 5) + day + 2) % 7 toInt
+
+    val s = for
+      y <- 1901 to 2000
+      m <- 1 to 12
+      if dayOfWeeks(y, m, 1) == 0
+    yield 1
+
+    s.sum
+  } named "euler19"
+
+  /**
+   * Problème 20
+   *
+   * Somme des chiffres du nombre 100!
+   */
+  val euler20 = Mesure {
+    fact(100) |> sumOfDigits
+  } named "euler20"
+
+  /**
+   * Problème 21
+   *
+   * Soit d(n) la somme des diviseurs propres de n
+   * Si d(a) = b et d(b) = a avec a != b, alors a et b sont dits nombres amicaux
+   *
+   * Calculer la somme des nombres amicaux inférieurs é 10000
+   */
+  inline def amicable(m: Long, n: Long): Boolean = m < n && sumOfDiv(n) == m
+  val euler21 = Mesure {
+    (for
+      i <- 2L until 10000
+      j = sumOfDiv(i)
+      if amicable(i, j)
+    yield i + j).sum
+  } named "euler21"
+
+  /**
+   * Problème 23
+   *
+   * Un nombre parfait est un nombre pour lequel la somme de ses diviseurs est égal à lui-méme.
+   * Un nombre est déficient si la somme de ses diviseurs est inférieur à lui-méme
+   * Un nombre est abondant si la somme de ses diviseurs est supérieur à lui-méme
+   * 24 est le plus petit qui peut s'écrire comme la somme de deux nombres abondants (12 + 12)
+   *
+   * Trouver la somme de tous les nombres positifs qui ne peuvent pas s'écrire comme la somme de nombres abondants.
+   * A partir de 28123, tous les nombres peuvent s'écrire sous cette forme.
+   */
+  val euler23 = Mesure {
+    // Soit n, on vérifie s'il peut s'écrire comme la somme de deux nombres abondants
+    inline def isAbundant(n: Long): Boolean = sumOfDiv(n) > n
+    lazy val abunds = (12L until 28124).filter(isAbundant(_))
+    def isabds(n: Long): Boolean =
+      val abds = for
+        p <- abunds.iterator
+        q = n - p
+        if q > 11
+        if isAbundant(q)
+      yield (p, q)
+      abds.hasNext
+
+    (12L until 28124).filter(!isabds(_)).sum + (1 to 11).sum
+  } named "euler23"
+
+  /**
+   * Problème 24
+   *
+   * millionième permutation lexicographique des chiffres de 0 à 9
+   */
+  val euler24 = Mesure {
+    val r = "0123456789".permutations //permutations déjà triée dans l'ordre lexicographique, par construction
+    r.drop(999999).next()
+  } named "euler24"
+
   @main def run_2() : Unit =
     val ListOfProblems : Seq[Mesure[_]] = Seq(
       euler13,
       euler14,
       euler15,
       euler16,
-      euler17
+      euler17,
+      euler18,
+      euler19,
+      euler20,
+      euler21,
+      euler23,
+      euler24
     )
 
     ListOfProblems.foreach( m =>
