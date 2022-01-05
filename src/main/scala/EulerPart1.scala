@@ -7,7 +7,8 @@ import scala.annotation.tailrec
 import scala.language.postfixOps
 
 /**
- * Euler exercices part One
+ * Euler partie 1
+ * Problèmes 1 à 12
  */
 object EulerPart1:
 
@@ -158,7 +159,7 @@ object EulerPart1:
     Primes() takeWhile (_ < 2000000) sum
   } named "euler10"
 
-  val euler11 = Mesure {
+  val euler11: Mesure[Option[Int]] = Mesure {
     val grid =  (
       "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08 " +
       "49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00 " +
@@ -207,13 +208,13 @@ object EulerPart1:
    *
    */
 
-  lazy val triangles = LazyList.from(1).scanLeft(0)(_ + _)
-  val euler12 = Mesure {
+  lazy val triangles: Seq[Int] = LazyList.from(1).scanLeft(0)(_ + _)
+  val euler12: Mesure[Option[(Int, Int)]] = Mesure {
     triangles.map(n => divisors(BigInt(n))).zip(triangles).find(x => x._1 >= 500)
   } named "euler12"
 
-  @main def run() : Unit =
-    val ListOfProblems = Seq(
+  @main def run_1() : Unit =
+    val ListOfProblems: Seq[Mesure[_]] = Seq(
       euler01,
       euler02,
       euler03,
