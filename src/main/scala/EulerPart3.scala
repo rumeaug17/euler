@@ -67,7 +67,7 @@ object EulerPart3:
    *
    * Trouver la somme des produits 9-pandigitaux (chaque produit ne doit étre considéré qu'une fois)
    */
-  inline private def isPandigital(n: Int)(s: String): Boolean =
+  inline def isPandigital(n: Int)(s: String): Boolean =
     s.length == n && (1 to n).forall(i => s.map(_.asDigit).contains(i))
 
   inline private def prodIsPandigital(a: Long, b: Long, p: Long) =
@@ -178,6 +178,29 @@ object EulerPart3:
     (1 to 1000).map(i => BigInt(i).pow(i)).sum.toString.takeRight(10)
   } named "euler48"
 
+  /**
+   * Problème 43
+   */
+  val euler43 = Mesure {
+    def filter(p: String)(begin: Int, end: Int, modulo: Int): Boolean =
+      p.substring(begin, end).toInt % modulo == 0
+
+    val pSS = for
+      p <- "1234567890".permutations
+      if p.charAt(0) != '0'
+      f = filter(p) _
+      if f(1, 4, 2)
+      if f(2, 5, 3)
+      if f(3, 6, 5)
+      if f(4, 7, 7)
+      if f(5, 8, 11)
+      if f(6, 9, 13)
+      if f(7, 10, 17)
+    yield p
+
+    pSS map (BigInt(_)) sum
+  } named "euler43"
+
   @main def run_3() : Unit =
     val ListOfProblems : Seq[Mesure[_]] = Seq(
       euler25,
@@ -191,7 +214,8 @@ object EulerPart3:
       euler40,
       euler41,
       euler45,
-      euler48
+      euler48,
+      euler43
     )
 
     ListOfProblems.foreach( m =>
