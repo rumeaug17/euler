@@ -1,0 +1,125 @@
+package org.rg.euler
+
+import org.rg.su3.*
+import org.rg.su3.mesure.*
+
+object EulerPart5:
+
+  /**
+   * Problème 37
+   */
+  val euler37: Mesure[BigInt] = Mesure {
+
+    def truncLeft(n: String) =
+      n.scanLeft("") {
+        (s: String, c: Char) => s + c
+      }.tail.init
+
+    def truncRight(n: String) =
+      n.scanRight("") {
+        (c: Char, s: String) => c + s
+      }.init.tail
+
+    val l = for
+      p <- Primes()
+      if p > 7
+      if truncLeft(p.toString).forall(sp => Primes.isPrime(sp.toInt))
+      if truncRight(p.toString).forall(sp => Primes.isPrime(sp.toInt))
+    yield p
+
+    l.take(11).sum
+  } named "euler37"
+
+  /**
+   * Problème 38
+   */
+  val euler38: Mesure[String] = Mesure {
+    val r = for
+      n <- LazyList.from(9999, -1)
+      i <- 1 to 9
+      r = (1 to i).map(_ * n).map(_.toString).foldLeft("")(_ + _)
+      if EulerPart3.isPandigital(9)(r)
+    yield r
+    r.head
+  } named "euler38"
+
+  /**
+   * Problème 39
+   */
+  val euler39: Mesure[Int] = Mesure {
+    val triangles = for
+      a <- 499 to 1 by -1
+      b <- a to 499
+      c <- (a * a + b * b).sqrtI if c > 0
+      p = a + b + c
+      if p <= 1000
+    yield p
+    triangles.groupBy(identity).maxBy(_._2.size)._1
+  } named "euler39"
+
+  val euler44: Mesure[(Any, Int, Int)] = Mesure {
+    inline def p(n: Int) = n * (3 * n - 1) / 2 //> p: (n: Int)Int
+
+    /*  y  = p(x) = x(3x-1)/2
+     *  2y = 3x² - x
+     *  3x² - x - 2y = 0
+     *  x = (-b + sqrt(b² - 4ac))/2a avec a = 3, b = -1, c = -2y (formule quadratique)
+     *  x =  (1 + sqrt(1 + 24y))/6
+     */
+    def isPentagonNumber(p: Int) =
+      val t = p * 24 + 1
+      val s = scala.math.sqrt(t)
+      s * s == t && s % 6 == 5
+
+    val pn = for
+      j <- LazyList.from(2)
+      i <- j - 1 to 1 by -1
+      if isPentagonNumber(p(i) + p(j))
+      d = p(j) - p(i)
+      if isPentagonNumber(d)
+    yield (scala.math.abs(d), i, j)
+    pn.head //c'est forcément le premier qui a la plus petite différence
+  } named "euler44"
+
+  val euler46: Mesure[Int] = Mesure {
+    def isSum(n: Int) =
+      val sum = LazyList.from(1).map(s => n - 2 * s * s).takeWhile(_ > 0)
+      sum.exists(p => p != 1 && Primes.isPrime(p))
+
+    val candidates = LazyList.from(35, 2).filter(!Primes.isPrime(_)).filter(!isSum(_))
+    candidates.head
+  } named "euler46"
+
+  val euler47: Mesure[(Int, Int, Int, Int)] = Mesure {
+    def distinctFactors(i: BigInt) =
+      primeFactors(i).groupBy(identity).toList.map(t => t._2.product)
+
+    (for
+      i1 <- LazyList.from(200)
+      i2 = i1 + 1
+      i3 = i1 + 2
+      i4 = i1 + 3
+      di1 = distinctFactors(i1) if di1.length == 4
+      di2 = distinctFactors(i2) if di2.length == 4
+      if di1 != di2
+      di3 = distinctFactors(i3) if di3.length == 4
+      if di1 != di3 && di2 != di3
+      di4 = distinctFactors(i4) if di4.length == 4
+      if di1 != di4 && di2 != di4 && di3 != di4
+    yield (i1, i2, i3, i4)).head
+
+  } named "euler47"
+
+  @main def run_5() : Unit =
+    val ListOfProblems : Seq[Mesure[_]] = Seq(
+      euler37,
+      euler38,
+      euler39,
+      euler44,
+      euler46,
+      euler47
+    )
+
+    ListOfProblems.foreach( m =>
+      Console.println(m.collect(Total))
+    )
