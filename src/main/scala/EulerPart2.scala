@@ -139,7 +139,7 @@ object EulerPart2:
    * tips on calcule la longueur de la liste, pas la liste elle méme
    *
    */
-  val euler14 = Mesure {
+  val euler14: Mesure[Int] = Mesure {
     @tailrec
     def genSeq(n: Long, len: Long = 1): Long = n match
       case 1               => len
@@ -155,7 +155,8 @@ object EulerPart2:
    * Trouver le nombre de chemins possibles dans une grille de 20*20 pour relier le coin
    * haut-gauche avec le coin bas-droit
    */
-  val euler15 = Mesure {
+  val euler15: Mesure[Long] = Mesure {
+    @tailrec
     def f(row: Seq[Long], c: Int): Long =
       val next = row.scanLeft(0L)(_ + _)
       if c == 0 then next.last else f(next, c - 1)
@@ -168,9 +169,9 @@ object EulerPart2:
   /**
    * Problème 16
    *
-   * Somme des chiffres du nombre 2^1000
+   * Somme des chiffres du nombre 2**1000
    */
-  val euler16 = Mesure {
+  val euler16: Mesure[Int] = Mesure {
     BigInt(2).pow(1000) |> sumOfDigits
   } named "euler16"
 
@@ -178,7 +179,7 @@ object EulerPart2:
    * Problème 17
    * Nombre de lettres (sans les espaces) pour écrire tous les nombres de 1 à mille en anglais
    */
-  val euler17 = Mesure {
+  val euler17: Mesure[Int] = Mesure {
     val units = Seq(0, 3, 3, 5, 4, 4, 3, 5, 5, 4, 3, 6, 6, 8, 8, 7, 7, 9, 8, 8)
     val tens = Seq(0, 0, 6, 6, 5, 5, 5, 7, 6, 6)
     def name(n: Int): Int =
@@ -208,9 +209,9 @@ object EulerPart2:
         val next = tour(n)(predLine)
         recTour(n + 1)(next)
 
-    recTour(1)(reverseTriangleArray(0)).last
+    recTour(1)(reverseTriangleArray(0).toIndexedSeq).last
   end TriangleSumProblems
-  val euler18 = Mesure {
+  val euler18: Mesure[Long] = Mesure {
     val input = """|75
                    |95 64
                    |17 47 82
@@ -227,7 +228,7 @@ object EulerPart2:
                    |63 66 04 68 89 53 67 30 73 16 69 87 40 31
                    |04 62 98 27 23 09 70 98 73 93 38 53 60 04 23""".stripMargin.split("\n")
 
-    TriangleSumProblems(input)
+    TriangleSumProblems(input.toIndexedSeq)
   } named "euler18"
 
   /**
@@ -235,7 +236,7 @@ object EulerPart2:
    *
    * Nombre de dimanches entre le 01/01/1901 et le 31/12/2000
    */
-  val euler19 = Mesure {
+  val euler19: Mesure[Int] = Mesure {
     def mod(x: Long, y: Long): Long =
       val x1 = x % y
       if y > 0 && x1 < 0 || y < 0 && x1 > 0 then
@@ -263,7 +264,7 @@ object EulerPart2:
    *
    * Somme des chiffres du nombre 100!
    */
-  val euler20 = Mesure {
+  val euler20: Mesure[Int] = Mesure {
     fact(100) |> sumOfDigits
   } named "euler20"
 
@@ -276,7 +277,7 @@ object EulerPart2:
    * Calculer la somme des nombres amicaux inférieurs é 10000
    */
   inline def amicable(m: Long, n: Long): Boolean = m < n && sumOfDiv(n) == m
-  val euler21 = Mesure {
+  val euler21: Mesure[Long] = Mesure {
     (for
       i <- 2L until 10000
       j = sumOfDiv(i)
@@ -285,12 +286,12 @@ object EulerPart2:
   } named "euler21"
 
   /* Euler 22 */
-  val euler22 = Mesure {
+  val euler22: Mesure[BigInt] = Mesure {
     val resourceReader : Iterator[String] = Source.fromResource("euler22.data").getLines
     // TODO: create list from line
     val l: List[String] = List()
-    inline def ord(c: Char): Int = c - 'A' + 1
-    val listOfScores = l.sorted.zipWithIndex.map { case (s, i) => BigInt(s.map(ord(_)).sum) * (i + 1) }
+    def ord(c: Char): Int = c - 'A' + 1
+    val listOfScores = l.sorted.zipWithIndex.map { case (s, i) => BigInt(s.map(ord).sum) * (i + 1) }
     listOfScores sum
   } named "euler22"
 
@@ -305,10 +306,12 @@ object EulerPart2:
    * Trouver la somme de tous les nombres positifs qui ne peuvent pas s'écrire comme la somme de nombres abondants.
    * A partir de 28123, tous les nombres peuvent s'écrire sous cette forme.
    */
-  val euler23 = Mesure {
+  val euler23: Mesure[Long] = Mesure {
     // Soit n, on vérifie s'il peut s'écrire comme la somme de deux nombres abondants
-    inline def isAbundant(n: Long): Boolean = sumOfDiv(n) > n
-    lazy val abunds = (12L until 28124).filter(isAbundant(_))
+    def isAbundant(n: Long): Boolean = sumOfDiv(n) > n
+    
+    lazy val abunds = (12L until 28124).filter(isAbundant)
+
     def isabds(n: Long): Boolean =
       val abds = for
         p <- abunds.iterator
@@ -326,7 +329,7 @@ object EulerPart2:
    *
    * millionième permutation lexicographique des chiffres de 0 à 9
    */
-  val euler24 = Mesure {
+  val euler24: Mesure[String] = Mesure {
     val r = "0123456789".permutations //permutations déjà triée dans l'ordre lexicographique, par construction
     r.drop(999999).next()
   } named "euler24"

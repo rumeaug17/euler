@@ -2,7 +2,7 @@ package org.rg.euler
 
 import EulerPart2.TriangleSumProblems
 
-import org.rg.euler.EulerPart1.isPalindrome
+import EulerPart1.isPalindrome
 import org.rg.su3.*
 import org.rg.su3.mesure.*
 
@@ -20,7 +20,7 @@ object EulerPart4:
     // TODO: add file to ressources
 
     val input = try source.getLines().toArray finally source.close()
-    TriangleSumProblems(input)
+    TriangleSumProblems(input.toIndexedSeq)
   } named "euler67"
 
   //-- 56. Somme maximale des chiffres des nombres de la forme a^b avec a et b < 100
@@ -47,14 +47,14 @@ object EulerPart4:
   // -- 53. Combien y a-t-il de valeurs non forcément distinctes, supérieurs 1000000 pour C(n,p) = n! / (p! * (n-p)!) avec  1 <= n <= 100
   val euler53: Mesure[Int] = Mesure {
     def combs(n: Int, p: Int): BigInt =
-      fact(n) / (fact(p) * (fact(n - p)))
+      fact(n) / (fact(p) * fact(n - p))
 
     val c = for
       n <- 1 to 100
       p <- 1 to n
     yield combs(n, p)
 
-    c.filter(_ > 1000000).length
+    c.count(_ > 1000000)
   } named "euler53"
 
   /**
@@ -75,7 +75,7 @@ object EulerPart4:
           isLychred(r, iter + 1)
 
   val euler55: Mesure[Int] = Mesure {
-    (1 until 10000) filter (isLychred(_, 0)) length
+    (1 until 10000).count(isLychred(_, 0))
   } named "euler55"
 
   //-- 97. Les 10 derniers chiffres du nombre 28433 * 2^7830457 + 1 (nombre premier non-Mersene)
@@ -98,7 +98,7 @@ object EulerPart4:
     (m._1 * m._2, m)
   } named "euler27"
 
-  val euler206 = Mesure {
+  val euler206: Mesure[Int] = Mesure {
     val regex = java.util.regex.Pattern.compile("1.2.3.4.5.6.7.8.9")
     val r = Range(scala.math.sqrt(10203040506070809l).toInt, scala.math.sqrt(19293949596979899l).toInt)
     10 * r.find(n => regex.matcher(BigInt(n).pow(2).toString).matches).get
@@ -119,16 +119,16 @@ object EulerPart4:
     Range(2, 1000).filter(i => i % 2 != 0 && i % 5 != 0).map(cycle_length(_) + 1).max
   } named "euler26"
 
-  val euler42 = Mesure {
+  val euler42: Mesure[Any] = Mesure {
     val triangleNumbers = LazyList.from(1).map(n => n * (n + 1) / 2)
-    inline def isTriangular(n: Int) = triangleNumbers.takeWhile(_ <= n).last == n
-    inline def wordValue(s: String) = s.map(c => c.toInt - 'A'.toInt + 1).sum
-    inline def res(l: List[String]) = l.map(wordValue(_)).filter(isTriangular(_)).length
+    def isTriangular(n: Int) = triangleNumbers.takeWhile(_ <= n).last == n
+    def wordValue(s: String) = s.map(c => c.toInt - 'A'.toInt + 1).sum
+    inline def res(l: List[String]) = l.map(wordValue).filter(isTriangular).length
 
-    
     val resourceReader : Iterator[String] = Source.fromResource("euler42.data").getLines
     // TODO: create list from line
     val englishWords = List()
+
     res(englishWords)
   } named "euler42"
 

@@ -105,6 +105,7 @@ object EulerPart1:
     @tailrec def prod(l : List[Long], acc : List[Long]) : List[Long] = l match
       case _ if l.length == conslen => l.product :: acc
       case s :: xs => prod(xs, l.take(conslen).product :: acc)
+      case _ => acc
 
     val s =
       "73167176531330624919225119674426574742355349194934"+
@@ -137,7 +138,7 @@ object EulerPart1:
    * Problème 9
    *
    * Trouver le triplet de pythagore pour lequel a + b + c = 1000 et donner le produit abc.
-   * Un triplet de pythagore doit vérifier a^2 + b^2 = c^2
+   * Un triplet de pythagore doit vérifier a**2 + b**2 = c**2
    */
   val euler09: Mesure[Int] = Mesure {
     (for

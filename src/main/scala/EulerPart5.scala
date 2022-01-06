@@ -12,12 +12,12 @@ object EulerPart5:
 
     def truncLeft(n: String) =
       n.scanLeft("") {
-        (s: String, c: Char) => s + c
+        (s: String, c: Char) => s"$s$c"
       }.tail.init
 
     def truncRight(n: String) =
       n.scanRight("") {
-        (c: Char, s: String) => c + s
+        (c: Char, s: String) => s"$c$s"
       }.init.tail
 
     val l = for

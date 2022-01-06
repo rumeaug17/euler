@@ -121,9 +121,10 @@ object EulerPart3:
    * Problème 40
    *
    * Soit d une fraction décimale irrationelle construite  par la concaténation des nombres naturels
-   * => 0.123456789101112131415161718192021...
+   * :: 0.123456789101112131415161718192021...
    * d(n) est le niéme chiffre de la partie décimale
-   * Quelle est la valeur de "d(1) x d(10) x d(100) x d(1000) x d(10000) x d(100000) x d(1000000)"
+   *
+   * Quelle est la valeur de d(1) x d(10) x d(100) x d(1000) x d(10000) x d(100000) x d(1000000)
    */
   private lazy val dfd = (1 to 1000000).mkString
   private inline def d(n : Int) = dfd(n-1).asDigit
@@ -181,7 +182,7 @@ object EulerPart3:
   /**
    * Problème 43
    */
-  val euler43 = Mesure {
+  val euler43: Mesure[BigInt] = Mesure {
     def filter(p: String)(begin: Int, end: Int, modulo: Int): Boolean =
       p.substring(begin, end).toInt % modulo == 0
 
