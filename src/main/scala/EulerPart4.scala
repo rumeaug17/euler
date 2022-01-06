@@ -16,9 +16,7 @@ import scala.io.Source
 object EulerPart4:
 
   val euler67: Mesure[Long] = Mesure {
-    val source = scala.io.Source.fromFile("p067_triangle.txt")
-    // TODO: add file to ressources
-
+    val source = Source.fromResource("p067_triangle.txt")
     val input = try source.getLines().toArray finally source.close()
     TriangleSumProblems(input.toIndexedSeq)
   } named "euler67"
@@ -140,7 +138,8 @@ object EulerPart4:
       euler27,
       euler206,
       euler26,
-      euler42
+      euler42,
+      euler67
     )
 
     ListOfProblems.foreach( m =>
