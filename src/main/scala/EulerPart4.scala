@@ -123,11 +123,9 @@ object EulerPart4:
     val triangleNumbers = LazyList.from(1).map(n => n * (n + 1) / 2)
     def isTriangular(n: Int) = triangleNumbers.takeWhile(_ <= n).last == n
     def wordValue(s: String) = s.map(c => c.toInt - 'A'.toInt + 1).sum
-    inline def res(l: List[String]) = l.map(wordValue).filter(isTriangular).length
+    inline def res(l: IndexedSeq[String]) = l.map(wordValue).filter(isTriangular).length
 
-    val resourceReader : Iterator[String] = Source.fromResource("euler42.data").getLines
-    // TODO: create list from line
-    val englishWords = List()
+    val englishWords = Source.fromResource("euler42.data").mkString.split(',').toIndexedSeq
 
     res(englishWords)
   } named "euler42"

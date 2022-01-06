@@ -287,9 +287,7 @@ object EulerPart2:
 
   /* Euler 22 */
   val euler22: Mesure[BigInt] = Mesure {
-    val resourceReader : Iterator[String] = Source.fromResource("euler22.data").getLines
-    // TODO: create list from line
-    val l: List[String] = List()
+    val l = Source.fromResource("euler22.data").mkString.split(',').toIndexedSeq
     def ord(c: Char): Int = c - 'A' + 1
     val listOfScores = l.sorted.zipWithIndex.map { case (s, i) => BigInt(s.map(ord).sum) * (i + 1) }
     listOfScores sum
@@ -309,7 +307,7 @@ object EulerPart2:
   val euler23: Mesure[Long] = Mesure {
     // Soit n, on vérifie s'il peut s'écrire comme la somme de deux nombres abondants
     def isAbundant(n: Long): Boolean = sumOfDiv(n) > n
-    
+
     lazy val abunds = (12L until 28124).filter(isAbundant)
 
     def isabds(n: Long): Boolean =
