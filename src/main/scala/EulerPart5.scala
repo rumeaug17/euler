@@ -113,7 +113,11 @@ object EulerPart5:
   } named "euler47"
 
   val euler92: Mesure[Int] = Mesure {
-    inline def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
+    //inline def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
+    inline def sumSquare(n: Long): Long = n.toString.map(x => {
+      val xp = x.asDigit
+      xp * xp
+    }).sum
 
     @tailrec
     def reduce(n : Long): Long =
