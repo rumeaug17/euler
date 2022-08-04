@@ -110,6 +110,25 @@ object EulerPart5:
 
   } named "euler47"
 
+  val euler92: Mesure[Int] = Mesure {
+    def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
+
+    def reduce(n : Long): Long =
+      val r = sumSquare(n)
+      if r ==1 || r == 89 then
+        r
+      else
+        reduce(r)
+
+    val lst = for
+      i <- 2 to 10000000
+      r = reduce(i)
+      if r == 89
+    yield i
+
+    lst.length
+  } named "euler92"
+
   @main def run_5() : Unit =
     val ListOfProblems : Seq[Mesure[_]] = Seq(
       euler37,
@@ -117,7 +136,8 @@ object EulerPart5:
       euler39,
       euler44,
       euler46,
-      euler47
+      euler47,
+      euler92
     )
 
     ListOfProblems.foreach( m =>

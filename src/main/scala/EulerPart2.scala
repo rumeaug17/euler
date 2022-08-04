@@ -211,6 +211,7 @@ object EulerPart2:
 
     recTour(1)(reverseTriangleArray(0).toIndexedSeq).last
   end TriangleSumProblems
+  
   val euler18: Mesure[Long] = Mesure {
     val input = """|75
                    |95 64
