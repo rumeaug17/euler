@@ -114,23 +114,23 @@ object EulerPart5:
 
   val euler92: Mesure[Int] = Mesure {
     //inline def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
+    // cf (mod n 10)^2 + (squareDigitSum (div n 10)) pour une mielleur optimation
     inline def sumSquare(n: Long): Long = n.toString.map(x => {
       val xp = x.asDigit
       xp * xp
     }).sum
 
     @tailrec
-    def reduce(n : Long): Long =
+    def reduce(n : Long): Boolean =
       val r = sumSquare(n)
       r match
-        case 1 | 44 | 32 | 13 | 10 => 1
-        case 89 | 85 | 145 | 42 | 20 | 4 | 16 | 37 | 58 => 89
+        case 1 | 44 | 32 | 13 | 10 => false
+        case 89 | 85 | 145 | 42 | 20 | 4 | 16 | 37 | 58 => true
         case _ => reduce(r)
 
     val lst = for
       i <- 2 to 10000000
-      r = reduce(i)
-      if r == 89
+      if reduce(i)
     yield i
 
     lst.length
