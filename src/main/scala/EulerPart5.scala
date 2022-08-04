@@ -3,6 +3,8 @@ package org.rg.euler
 import org.rg.su3.*
 import org.rg.su3.mesure.*
 
+import scala.annotation.tailrec
+
 object EulerPart5:
 
   /**
@@ -111,8 +113,9 @@ object EulerPart5:
   } named "euler47"
 
   val euler92: Mesure[Int] = Mesure {
-    def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
+    inline def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
 
+    @tailrec
     def reduce(n : Long): Long =
       val r = sumSquare(n)
       if r ==1 || r == 89 then
