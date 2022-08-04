@@ -122,10 +122,10 @@ object EulerPart5:
     @tailrec
     def reduce(n : Long): Long =
       val r = sumSquare(n)
-      if r ==1 || r == 89 then
-        r
-      else
-        reduce(r)
+      r match
+        case 1 | 44 | 32 | 13 | 10 => 1
+        case 89 | 85 | 145 | 42 | 20 | 4 | 16 | 37 | 58 => 89
+        case _ => reduce(r)
 
     val lst = for
       i <- 2 to 10000000
