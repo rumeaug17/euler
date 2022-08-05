@@ -118,10 +118,9 @@ object EulerPart5:
 
   val euler49: Mesure[Seq[String]] = Mesure {
     // trouver une séquence croissante de trois nombres de 4 chiffres, permutations, qui sont premiers et dont l'écart enbtre chaque est constant
-    val primes = Primes().dropWhile(_ < 1000).takeWhile(_ < 10000)
+    val primes = Primes().dropWhile(_ < 1487).takeWhile(_ < 10000)
     (for
       p <- primes
-      if p != BigInt(1487)
       ecart <- 1 to 10000
       p2 = p + ecart
       if p2 < 10000
