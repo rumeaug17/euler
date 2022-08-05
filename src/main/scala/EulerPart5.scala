@@ -114,7 +114,7 @@ object EulerPart5:
   } named "euler47"
 
   inline def checkLetter(s1 : String, s2 : String) : Boolean =
-      s1.permutations.contains(s2)
+      s1.sorted == s2.sorted
 
   val euler49: Mesure[Seq[String]] = Mesure {
     // trouver une séquence croissante de trois nombres de 4 chiffres, permutations, qui sont premiers et dont l'écart enbtre chaque est constant
