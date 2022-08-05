@@ -1,6 +1,7 @@
 package org.rg.euler
 
 import org.rg.su3.*
+import org.rg.su3.Primes.isPrime
 import org.rg.su3.mesure.*
 
 import scala.annotation.tailrec
@@ -112,6 +113,27 @@ object EulerPart5:
 
   } named "euler47"
 
+  inline def checkLetter(s1 : String, s2 : String) : Boolean =
+      s1.permutations.contains(s2)
+
+  val euler49: Mesure[Seq[String]] = Mesure {
+    // trouver une séquence croissante de trois nombres de 4 chiffres, permutations, qui sont premiers et dont l'écart enbtre chaque est constant
+    val primes = Primes().dropWhile(_ < 1000).takeWhile(_ < 10000)
+    (for
+      p <- primes
+      if p != BigInt(1487)
+      ecart <- 1 to 10000
+      p2 = p + ecart
+      if p2 < 10000
+      if checkLetter(p.toString, p2.toString)
+      if primes.contains(p2)
+      p3 = p2 + ecart
+      if p3 < 10000
+      if checkLetter(p.toString, p3.toString)
+      if primes.contains(p3)
+    yield s"${p}_${p2}_${p3}").toList
+  } named "euler49"
+
   val euler92: Mesure[Int] = Mesure {
 
     def sumDigitSquare(n: Long) : Long =
@@ -147,6 +169,7 @@ object EulerPart5:
       euler44,
       euler46,
       euler47,
+      euler49,
       euler92
     )
 
