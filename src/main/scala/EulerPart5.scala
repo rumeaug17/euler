@@ -113,16 +113,19 @@ object EulerPart5:
   } named "euler47"
 
   val euler92: Mesure[Int] = Mesure {
-    //inline def sumSquare(n: Long): Long = n.toString.map(x => math.pow(x.asDigit, 2)).sum.toLong
-    // cf (mod n 10)^2 + (squareDigitSum (div n 10)) pour une mielleur optimation
-    inline def sumSquare(n: Long): Long = n.toString.map(x => {
-      val xp = x.asDigit
-      xp * xp
-    }).sum
+
+    def sumDigitSquare(n: Long) : Long =
+      n match
+        case 0 => 0
+        case 1 => 1
+        case _ =>
+          val mod = n % 10
+          val div = n / 10
+          mod * mod + sumDigitSquare(div)
 
     @tailrec
     def reduce(n : Long): Boolean =
-      val r = sumSquare(n)
+      val r = sumDigitSquare(n)
       r match
         case 1 | 44 | 32 | 13 | 10 => false
         case 89 | 85 | 145 | 42 | 20 | 4 | 16 | 37 | 58 => true
