@@ -160,6 +160,10 @@ object EulerPart5:
     lst.length
   } named "euler92"
 
+  val euler57: Mesure[Int] = Mesure {
+    ???
+  } named "euler57"
+
   @main def run_5() : Unit =
     val ListOfProblems : Seq[Mesure[_]] = Seq(
       euler37,
